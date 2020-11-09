@@ -46,12 +46,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.groupBox_inputs = QtWidgets.QGroupBox(self.layoutWidget)
         self.groupBox_inputs.setTitle("Inputs")
         self.gridLayout_1 = QtWidgets.QGridLayout(self.groupBox_inputs)
+        
 
         self.groupBox_clfMode = QtWidgets.QGroupBox(self.layoutWidget)
         self.groupBox_clfMode.setTitle("Select Classification Mode")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_clfMode)
         
-        #grids
+        #tab
+        self.tabs_input = QtWidgets.QTabWidget(self.groupBox_inputs)
+        self.image_tab = QtWidgets.QWidget()
+        self.image_tab.setAutoFillBackground(True)
+        self.validation_tab = QtWidgets.QWidget()
+        self.validation_tab.setAutoFillBackground(True)
+        self.tabs_input.addTab(self.image_tab,'Image')
+        self.tabs_input.addTab(self.validation_tab,'CSV/Validation')
+        self.gridLayout_1_1 = QtWidgets.QGridLayout(self.image_tab)
+        self.gridLayout_1_2 = QtWidgets.QGridLayout(self.validation_tab)
         
         
         
@@ -62,19 +72,28 @@ class MainWindow(QtWidgets.QMainWindow):
         #labels
         self.label_progTitle = QtWidgets.QLabel(self.layoutWidget,text = "Random Forest Classifier\n v1.0", font=QtGui.QFont('Sans',25))
         self.label_progTitle.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_inpImg = QtWidgets.QLabel(self.groupBox_inputs,text = "Input Image")
-        self.label_inpBlocks = QtWidgets.QLabel(self.groupBox_inputs,text = "Number of Blocks ( >1)")
-        self.label_outImgC = QtWidgets.QLabel(self.groupBox_inputs,text = "Output Image (Class)")
+        self.label_inpImg = QtWidgets.QLabel(self.image_tab,text = "Input Image")
+        self.label_inpBlocks = QtWidgets.QLabel(self.image_tab,text = "Number of Blocks ( >1)")
+        self.label_outImgC = QtWidgets.QLabel(self.image_tab,text = "Output Image (Class)")
         self.label_outImgP = QtWidgets.QLabel(self.groupBox_inputs,text = "Ouput Image (Probabilities)")
+        self.label_inpCsv = QtWidgets.QLabel(self.validation_tab,text = "Input CSV")
+        self.label_inpCsvVar = QtWidgets.QLabel(self.validation_tab,text = "Variables")
+        self.label_inpCsvLabel = QtWidgets.QLabel(self.validation_tab,text = "Label")
+        self.label_outCsv = QtWidgets.QLabel(self.validation_tab,text = "Output Predictions")
+        self.label_outCMatrix = QtWidgets.QLabel(self.validation_tab,text = "Output Confusion Matrix")
         self.label_importTrain = QtWidgets.QLabel(self.groupBox_clfMode,text = "Import training data")
         self.label_trainVar = QtWidgets.QLabel(self.groupBox_clfMode,text = "Training Variables")
         self.label_trainLabel = QtWidgets.QLabel(self.groupBox_clfMode,text = "Training Labels")
         self.label_importClf = QtWidgets.QLabel(self.groupBox_clfMode,text = "Import Classifier")
         
         #buttons
-        self.browseInpImg = QtWidgets.QPushButton(self.groupBox_inputs,text = "Browse")
-        self.saveOutImgC = QtWidgets.QPushButton(self.groupBox_inputs,text = "Save")
-        self.saveOutImgP = QtWidgets.QPushButton(self.groupBox_inputs,text = "Save")
+        self.browseInpImg = QtWidgets.QPushButton(self.image_tab,text = "Browse")
+        self.saveOutImgC = QtWidgets.QPushButton(self.image_tab,text = "Save")
+        self.saveOutImgP = QtWidgets.QPushButton(self.image_tab,text = "Save")
+        self.browseInpCsv = QtWidgets.QPushButton(self.validation_tab,text = "Browse")
+        self.selectCsvVars = QtWidgets.QPushButton(self.validation_tab,text = "Select From List")
+        self.saveOutCsv = QtWidgets.QPushButton(self.validation_tab,text = "Save")
+        self.saveOutCMatrix = QtWidgets.QPushButton(self.validation_tab,text = "Save")
         self.browseTrain = QtWidgets.QPushButton(self.groupBox_clfMode,text = "Browse")
         self.browseClf = QtWidgets.QPushButton(self.groupBox_clfMode,text = "Browse")
         self.selectVars = QtWidgets.QPushButton(self.groupBox_clfMode,text = "Select From List")
@@ -82,10 +101,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.runClf = QtWidgets.QPushButton(text = "Run")
 
         #lineEdits
-        self.lineEdit_inpImg = QtWidgets.QLineEdit(self.groupBox_inputs)
-        self.lineEdit_inpBlocks = QtWidgets.QLineEdit(self.groupBox_inputs)
-        self.lineEdit_outImgC = QtWidgets.QLineEdit(self.groupBox_inputs)
-        self.lineEdit_outImgP = QtWidgets.QLineEdit(self.groupBox_inputs)
+        self.lineEdit_inpImg = QtWidgets.QLineEdit(self.image_tab)
+        self.lineEdit_inpBlocks = QtWidgets.QLineEdit(self.image_tab)
+        self.lineEdit_outImgC = QtWidgets.QLineEdit(self.image_tab)
+        self.lineEdit_outImgP = QtWidgets.QLineEdit(self.image_tab)
+        self.lineEdit_inpCsv = QtWidgets.QLineEdit(self.validation_tab)
+        self.lineEdit_csvVar = QtWidgets.QLineEdit(self.validation_tab)
+        self.lineEdit_csvLabel = QtWidgets.QLineEdit(self.validation_tab)
+        self.lineEdit_outCsv = QtWidgets.QLineEdit(self.validation_tab)
+        self.lineEdit_outCMatrix = QtWidgets.QLineEdit(self.validation_tab)
         self.lineEdit_importTrain = QtWidgets.QLineEdit(self.groupBox_clfMode)
         self.lineEdit_trainVar = QtWidgets.QLineEdit(self.groupBox_clfMode)
         self.lineEdit_trainLabel = QtWidgets.QLineEdit(self.groupBox_clfMode)
@@ -95,9 +119,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.radioButton_train = QtWidgets.QRadioButton(self.groupBox_clfMode)
         self.radioButton_train.setText("Train Classifier")
         self.radioButton_importClf = QtWidgets.QRadioButton(self.groupBox_clfMode)
-        self.radioButton_importClf.setText("Import Classifier")        
+        self.radioButton_importClf.setText("Import Classifier")
+        self.radioButton_image = QtWidgets.QRadioButton(self.groupBox_inputs)
+        self.radioButton_image.setText("Classify image")
+        self.radioButton_validation = QtWidgets.QRadioButton(self.groupBox_inputs)
+        self.radioButton_validation.setText("Classify CSV (Validation)")
+        self.radioButton_imgvalid = QtWidgets.QRadioButton(self.groupBox_inputs)
+        self.radioButton_imgvalid.setText("Classify both")
 
-    
+        
 
 
         #layout
@@ -113,26 +143,49 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         
+        self.gridLayout_1.addWidget(self.radioButton_image,0,0)
+        self.gridLayout_1.addWidget(self.radioButton_validation,0,1)
+        self.gridLayout_1.addWidget(self.radioButton_imgvalid,0,2)
+        self.gridLayout_1.addWidget(self.tabs_input,1,0,2,3)
         
         
 
         ##start of group box input##
-      
-        self.gridLayout_1.addWidget(self.label_inpImg,0,0,1,1)
-        self.gridLayout_1.addWidget(self.lineEdit_inpImg,0,1,1,1)
-        self.gridLayout_1.addWidget(self.browseInpImg,0,2,1,1)
+        #image tab
+        self.gridLayout_1_1.addWidget(self.label_inpImg,0,0,1,1)
+        self.gridLayout_1_1.addWidget(self.lineEdit_inpImg,0,1,1,1)
+        self.gridLayout_1_1.addWidget(self.browseInpImg,0,2,1,1)
         
-        self.gridLayout_1.addWidget(self.label_inpBlocks,1,0,1,1)
-        self.gridLayout_1.addWidget(self.lineEdit_inpBlocks,1,1,1,1)
+        self.gridLayout_1_1.addWidget(self.label_inpBlocks,1,0,1,1)
+        self.gridLayout_1_1.addWidget(self.lineEdit_inpBlocks,1,1,1,1)
         
-        self.gridLayout_1.addWidget(self.label_outImgC,2,0,1,1)
-        self.gridLayout_1.addWidget(self.lineEdit_outImgC,2,1,1,1)
-        self.gridLayout_1.addWidget(self.saveOutImgC,2,2,1,1)      
+        self.gridLayout_1_1.addWidget(self.label_outImgC,2,0,1,1)
+        self.gridLayout_1_1.addWidget(self.lineEdit_outImgC,2,1,1,1)
+        self.gridLayout_1_1.addWidget(self.saveOutImgC,2,2,1,1)      
        
-        self.gridLayout_1.addWidget(self.label_outImgP,3,0,1,1)
-        self.gridLayout_1.addWidget(self.lineEdit_outImgP,3,1,1,1)
-        self.gridLayout_1.addWidget(self.saveOutImgP,3,2,1,1)
+        self.gridLayout_1_1.addWidget(self.label_outImgP,3,0,1,1)
+        self.gridLayout_1_1.addWidget(self.lineEdit_outImgP,3,1,1,1)
+        self.gridLayout_1_1.addWidget(self.saveOutImgP,3,2,1,1)
+        #csv tab
+        self.gridLayout_1_2.addWidget(self.label_inpCsv,0,0,1,1)
+        self.gridLayout_1_2.addWidget(self.lineEdit_inpCsv,0,1,1,1)
+        self.gridLayout_1_2.addWidget(self.browseInpCsv,0,2,1,1)
+      
+        self.gridLayout_1_2.addWidget(self.label_inpCsvVar,1,0,1,1)
+        self.gridLayout_1_2.addWidget(self.lineEdit_csvVar,1,1,1,1)
+        self.gridLayout_1_2.addWidget(self.selectCsvVars,1,2,1,1)
+                
+        self.gridLayout_1_2.addWidget(self.label_inpCsvLabel,2,0,1,1)
+        self.gridLayout_1_2.addWidget(self.lineEdit_csvLabel,2,1,1,1)
 
+        self.gridLayout_1_2.addWidget(self.label_outCsv,3,0,1,1)
+        self.gridLayout_1_2.addWidget(self.lineEdit_outCsv,3,1,1,1)
+        self.gridLayout_1_2.addWidget(self.saveOutCsv,3,2,1,1)
+        
+        self.gridLayout_1_2.addWidget(self.label_outCMatrix,4,0,1,1)
+        self.gridLayout_1_2.addWidget(self.lineEdit_outCMatrix,4,1,1,1)
+        self.gridLayout_1_2.addWidget(self.saveOutCMatrix,4,2,1,1)
+        
        ##end of groupbox input##
 
        ##start of groupbox clfmode##
@@ -168,6 +221,24 @@ class MainWindow(QtWidgets.QMainWindow):
         #limit nblocs to only integers
         self.onlyInt = QIntValidator(2, 100000)
         self.lineEdit_inpBlocks.setValidator(self.onlyInt)
+        
+        #deactivate elements
+        self.lineEdit_inpImg.setEnabled(False)
+        self.lineEdit_inpBlocks.setEnabled(False)
+        self.lineEdit_outImgC.setEnabled(False)
+        self.lineEdit_outImgP.setEnabled(False)
+        self.browseInpImg.setEnabled(False)
+        self.saveOutImgC.setEnabled(False)
+        self.saveOutImgP.setEnabled(False)
+        self.lineEdit_inpCsv.setEnabled(False)
+        self.browseInpCsv.setEnabled(False)
+        self.lineEdit_csvVar.setEnabled(False)
+        self.selectCsvVars.setEnabled(False)
+        self.lineEdit_csvLabel.setEnabled(False)
+        self.lineEdit_outCsv.setEnabled(False)
+        self.saveOutCsv.setEnabled(False)
+        self.lineEdit_outCMatrix.setEnabled(False)
+        self.saveOutCMatrix.setEnabled(False)
         self.lineEdit_importTrain.setEnabled(False)
         self.lineEdit_trainVar.setEnabled(False)
         self.lineEdit_trainLabel.setEnabled(False)
@@ -176,13 +247,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.selectVars.setEnabled(False)
         self.browseClf.setEnabled(False)
         self.runClf.setEnabled(False)
+        
 
         #click and connect
         self.radioButton_train.toggled.connect(self.importTraining)
         self.radioButton_importClf.toggled.connect(self.importClassifier)
+        self.radioButton_image.toggled.connect(self.classifyImage)
+        self.radioButton_validation.toggled.connect(self.classifyCsv)
+        self.radioButton_imgvalid.toggled.connect(self.classifyBoth)
         self.browseInpImg.clicked.connect(self.selectFile)
         self.saveOutImgC.clicked.connect(self.saveFileC)
         self.saveOutImgP.clicked.connect(self.saveFileP)
+        self.browseInpCsv.clicked.connect(self.browseCsv)
+        self.selectCsvVars.clicked.connect(self.selectFromList2)
+        self.saveOutCsv.clicked.connect(self.saveCsv)
+        self.saveOutCMatrix.clicked.connect(self.saveCMatrix)
         self.browseTrain.clicked.connect(self.selectFileTrain)
         self.browseClf.clicked.connect(self.selectFileClf)
         self.selectVars.clicked.connect(self.selectFromList)
@@ -233,6 +312,65 @@ class MainWindow(QtWidgets.QMainWindow):
             self.browseClf.setEnabled(True)
             self.runClf.setEnabled(True)
 
+    def classifyImage(self,enabled):
+        if enabled:
+            self.lineEdit_inpImg.setEnabled(True)
+            self.lineEdit_inpBlocks.setEnabled(True)
+            self.lineEdit_outImgC.setEnabled(True)
+            self.lineEdit_outImgP.setEnabled(True)
+            self.browseInpImg.setEnabled(True)
+            self.saveOutImgC.setEnabled(True)
+            self.saveOutImgP.setEnabled(True)
+            self.lineEdit_inpCsv.setEnabled(False)
+            self.browseInpCsv.setEnabled(False)
+            self.lineEdit_csvVar.setEnabled(False)
+            self.selectCsvVars.setEnabled(False)
+            self.lineEdit_csvLabel.setEnabled(False)
+            self.lineEdit_outCsv.setEnabled(False)
+            self.saveOutCsv.setEnabled(False)
+            self.lineEdit_outCMatrix.setEnabled(False)
+            self.saveOutCMatrix.setEnabled(False)
+            self.tabs_input.setCurrentIndex(0)
+            
+    def classifyCsv(self,enabled):
+        if enabled:
+            self.lineEdit_inpCsv.setEnabled(True)
+            self.browseInpCsv.setEnabled(True)
+            self.lineEdit_csvVar.setEnabled(True)
+            self.selectCsvVars.setEnabled(True)
+            self.lineEdit_csvLabel.setEnabled(True)
+            self.lineEdit_outCsv.setEnabled(True)
+            self.saveOutCsv.setEnabled(True)
+            self.lineEdit_outCMatrix.setEnabled(True)
+            self.saveOutCMatrix.setEnabled(True)
+            self.lineEdit_inpImg.setEnabled(False)
+            self.lineEdit_inpBlocks.setEnabled(False)
+            self.lineEdit_outImgC.setEnabled(False)
+            self.lineEdit_outImgP.setEnabled(False)
+            self.browseInpImg.setEnabled(False)
+            self.saveOutImgC.setEnabled(False)
+            self.saveOutImgP.setEnabled(False)
+            self.tabs_input.setCurrentIndex(1)
+
+    def classifyBoth(self,enabled):
+        if enabled:
+            self.lineEdit_inpImg.setEnabled(True)
+            self.lineEdit_inpBlocks.setEnabled(True)
+            self.lineEdit_outImgC.setEnabled(True)
+            self.lineEdit_outImgP.setEnabled(True)
+            self.browseInpImg.setEnabled(True)
+            self.saveOutImgC.setEnabled(True)
+            self.saveOutImgP.setEnabled(True)
+            self.lineEdit_inpCsv.setEnabled(True)
+            self.browseInpCsv.setEnabled(True)
+            self.lineEdit_csvVar.setEnabled(True)
+            self.selectCsvVars.setEnabled(True)
+            self.lineEdit_csvLabel.setEnabled(True)
+            self.lineEdit_outCsv.setEnabled(True)
+            self.saveOutCsv.setEnabled(True)
+            self.lineEdit_outCMatrix.setEnabled(True)
+            self.saveOutCMatrix.setEnabled(True)
+
     def selectFile(self):
 
         filename = QFileDialog.getOpenFileName(None, "Browse input image", "", "Image (*.tif *.png *.jpg *.bmp *.jpeg)")
@@ -247,6 +385,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
         filename = QFileDialog.getSaveFileName(None, "Save output image (prob.)", "", "Image (*.tif *.png *.jpg *.bmp *.jpeg)")
         self.lineEdit_outImgP.setText(filename[0])
+
+    def browseCsv(self):
+        filename = QFileDialog.getOpenFileName(None, "Browse input CSV", "", "CSV (*.csv)")
+        self.lineEdit_inpCsv.setText(filename[0])
+
+    def saveCsv(self):
+
+        filename = QFileDialog.getSaveFileName(None, "Save output predictions", "", "CSV (*.csv)")
+        self.lineEdit_outCsv.setText(filename[0])
+        
+    def saveCMatrix(self):
+
+        filename = QFileDialog.getSaveFileName(None, "Save Confusion Matrix", "", "CSV (*.csv)")
+        self.lineEdit_outCMatrix.setText(filename[0])
 
     def selectFileTrain(self):
 
@@ -266,9 +418,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.lineEdit_trainVar.setText(self.variables)
         self.lineEdit_trainLabel.setText(self.labels)
 
+    def setVarLabels2(self, variables, labels):
+
+        #self.variables_csv = variables
+        #self.labels_csv = labels
+        self.lineEdit_csvVar.setText(variables)
+        self.lineEdit_csvLabel.setText(labels)
+
     def selectFromList(self):
-        #'C:/Users/Daniel/Desktop/NOVA IMS/Thesis/DGT/Sampling/treino_75.csv'        
-        script_classificationRF.treino=self.lineEdit_importTrain.text()
+                
+        script_classificationRF.csv_file=self.lineEdit_importTrain.text()
         #print(script_classificationRF.getColumns())
 
         
@@ -276,13 +435,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dialog.submitted.connect(self.setVarLabels)
         self.dialog.show()
 
+    def selectFromList2(self):
+                
+        script_classificationRF.csv_file=self.lineEdit_inpCsv.text()
+        #print(script_classificationRF.getColumns())
+
+        
+        self.dialog_x = DialogWindow(script_classificationRF.getColumns())
+        self.dialog_x.submitted.connect(self.setVarLabels2)
+        self.dialog_x.show()
+
 
     def pressedSelectClfPar(self):
         self.dialog2 = DialogWindow2()
         #self.dialog2
         self.dialog2.show()
-
-
         
 
     def pressedRun(self):

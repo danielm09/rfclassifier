@@ -91,7 +91,7 @@ def createGeotiff2(outRaster2, data, geo_transform, projection, rows, cols, noda
 
 def getColumns():
     
-    df = pd.read_csv(treino, sep=',',nrows=1)
+    df = pd.read_csv(csv_file, sep=',',nrows=1)
     columns = df.columns
     del df
     return columns
